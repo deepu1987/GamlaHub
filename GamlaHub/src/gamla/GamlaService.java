@@ -57,7 +57,7 @@ public class GamlaService {
     public String register(@PathParam("user") String username, @PathParam("password") String password){
         String result="false";
         boolean x;
-        
+        //commnet enter
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection conn = DriverManager.getConnection(url, user, pass);
