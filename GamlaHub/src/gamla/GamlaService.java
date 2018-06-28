@@ -1579,8 +1579,8 @@ public class GamlaService {
 							 		   			e1.printStackTrace();
 							 		   		}
 							 		       	try {
-							 		      // 	HttpResponse<String> response = Unirest.get("http://api.msg91.com/api/sendhttp.php?sender=GAMLAA&route=4&mobiles="+URLEncoder.encode(mobilenumber, "UTF-8")+"&authkey="+URLEncoder.encode(authkey, "UTF-8")+"&country=91&message="+URLEncoder.encode(obj.getString("messageForSeller"), "UTF-8"))
-							 		       			  //.asString();
+							 		       	HttpResponse<String> response = Unirest.get("http://api.msg91.com/api/sendhttp.php?sender=GAMLAA&route=4&mobiles="+URLEncoder.encode(mobilenumber, "UTF-8")+"&authkey="+URLEncoder.encode(authkey, "UTF-8")+"&country=91&message="+URLEncoder.encode(obj.getString("messageForSeller"), "UTF-8"))
+							 		       			  .asString();
 							 		       	
 							 		       	}
 							 		       	catch (Exception e) {
