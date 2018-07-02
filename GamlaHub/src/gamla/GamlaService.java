@@ -1227,6 +1227,8 @@ public class GamlaService {
 		String mobileno,status = null;
 		String productid = "0";
 		String SearchQuery = "";
+		String filterQuery="";
+		String filterPricequery="";
 		Statement mystmt,mystmt1,mystmt2=null;
 		int Sortby;
 		int limitstart;
@@ -1241,6 +1243,8 @@ public class GamlaService {
 		    Sortby = obj.getInt("Sort");
 		    SearchQuery = obj.getString("Search");
 		    productid = obj.getString("productid");
+		    filterQuery = obj.getString("filterQuery");
+		    filterPricequery = obj.getString("filterpricequery");
 		    limitstart = Integer.parseInt(obj.getString("limitstart"));
 		    limitend = Integer.parseInt(obj.getString("limitend"));
 		    String OrderBY = "";
@@ -1260,26 +1264,27 @@ public class GamlaService {
 	    	con = DriverManager.getConnection(url, user, pass);
 	    	mystmt = con.createStatement();
 	    	mystmt2 = con.createStatement();
+	    	
 	    	ResultSet results2;
 	    	ResultSet results;
 	    	int rowcount;
 	    	if(productid.equalsIgnoreCase("0"))
 	    	{
-	    		results2 = mystmt2.executeQuery("Select COUNT(*) AS rowcount from productlist where Categoryname ='"+catagory+"' and Status = '"+status+"' "+SearchQuery+" "+OrderBY);
+	    		results2 = mystmt2.executeQuery("Select COUNT(*) AS rowcount from productlist where Categoryname ='"+catagory+"' and Status = '"+status+"' "+SearchQuery+" "+filterQuery+" "+filterPricequery+" "+OrderBY);
 			    results2.next();
 			    rowcount = results2.getInt("rowcount");
-		        System.out.println("Select * from productlist where Categoryname ='"+catagory+"' and Status = '"+status+"' "+SearchQuery+" "+OrderBY+" LIMIT "+limitstart+","+limitend);
-		    	results = mystmt.executeQuery("Select * from productlist where Categoryname ='"+catagory+"' and Status = '"+status+"' "+SearchQuery+" "+OrderBY+" LIMIT "+limitstart+","+limitend);
+		        System.out.println("Select * from productlist where Categoryname ='"+catagory+"' and Status = '"+status+"' "+SearchQuery+" "+filterQuery+" "+filterPricequery+" "+OrderBY+" LIMIT "+limitstart+","+limitend);
+		    	results = mystmt.executeQuery("Select * from productlist where Categoryname ='"+catagory+"' and Status = '"+status+"' "+SearchQuery+" "+filterQuery+" "+filterPricequery+" "+OrderBY+" LIMIT "+limitstart+","+limitend);
 		    
 	    	}
 	    	else
 	    	{
 	    		
-		    	results2 = mystmt2.executeQuery("Select COUNT(*) AS rowcount from productlist where ProuctId IN ("+productid+") and Status = '"+status+"' "+SearchQuery+" "+OrderBY);
+		    	results2 = mystmt2.executeQuery("Select COUNT(*) AS rowcount from productlist where ProuctId IN ("+productid+") and Status = '"+status+"' "+SearchQuery+" "+filterQuery+" "+filterPricequery+" "+OrderBY);
 			    results2.next();
 			    rowcount = results2.getInt("rowcount");
-		        System.out.println("Select * from productlist where  ProuctId IN ("+productid+") and Status = '"+status+"' "+SearchQuery+" "+OrderBY+" LIMIT "+limitstart+","+limitend);
-		    	results = mystmt.executeQuery("Select * from productlist where  ProuctId IN ("+productid+") and Status = '"+status+"' "+SearchQuery+" "+OrderBY+" LIMIT "+limitstart+","+limitend);
+		        System.out.println("Select * from productlist where  ProuctId IN ("+productid+") and Status = '"+status+"' "+SearchQuery+" "+filterQuery+" "+filterPricequery+" "+OrderBY+" LIMIT "+limitstart+","+limitend);
+		    	results = mystmt.executeQuery("Select * from productlist where  ProuctId IN ("+productid+") and Status = '"+status+"' "+SearchQuery+" "+filterQuery+" "+filterPricequery+" "+OrderBY+" LIMIT "+limitstart+","+limitend);
 		    
 	    	}
 	    	if(results.next())
@@ -1507,12 +1512,12 @@ public class GamlaService {
 					 		           	
 					 		       	
 					 		       	//===================================send message to buyer====================================================//
-					 		       	/*String authkey = "204882AnH8usahCKvL5ab1f865";
+					 		       	String authkey = "204882AnH8usahCKvL5ab1f865";
 					 		       	String sender = "GAMLAA";
 					 		       	String mobilenumber = "91"+obj.getString("BuyerMobile");
 					 		       
 					 		       	try {
-					 		   			String res = "http://api.msg91.com/api/sendhttp.php?sender=GAMLAA&route=4&mobiles="+URLEncoder.encode(mobile, "UTF-8")+"&authkey="+URLEncoder.encode(authkey, "UTF-8")+"&country=91&message="+URLEncoder.encode(message, "UTF-8");
+					 		   			String res = "http://api.msg91.com/api/sendhttp.php?sender=GAMLAA&route=4&mobiles="+URLEncoder.encode(mobilenumber, "UTF-8")+"&authkey="+URLEncoder.encode(authkey, "UTF-8")+"&country=91&message="+URLEncoder.encode(obj.getString("message"), "UTF-8");
 					 		   		
 					 		       	System.out.println("message--------->"+res);
 					 		       	} catch (UnsupportedEncodingException e1) {
@@ -1523,13 +1528,13 @@ public class GamlaService {
 					 		       	
 					 		       	
 					 		       	try {
-					 		       	HttpResponse<String> response = Unirest.get("http://api.msg91.com/api/sendhttp.php?sender=GAMLAA&route=4&mobiles="+URLEncoder.encode(mobile, "UTF-8")+"&authkey="+URLEncoder.encode(authkey, "UTF-8")+"&country=91&message="+URLEncoder.encode(message, "UTF-8"))
+					 		       	HttpResponse<String> response = Unirest.get("http://api.msg91.com/api/sendhttp.php?sender=GAMLAA&route=4&mobiles="+URLEncoder.encode(mobilenumber, "UTF-8")+"&authkey="+URLEncoder.encode(authkey, "UTF-8")+"&country=91&message="+URLEncoder.encode(obj.getString("message"), "UTF-8"))
 					 		       			  .asString();
 					 		       	
 					 		       	}
 					 		       	catch (Exception e) {
 					 		   			// TODO: handle exception
-					 		   		}*/
+					 		   		}
 					 		       	
 					 		       	//================================================================================================================//
 					 		       	
@@ -1567,19 +1572,19 @@ public class GamlaService {
 					 		       	
 					 		       	//========================================send message to seller==================================================//
 					 		       
-					 		   		  String authkey = "204882AnH8usahCKvL5ab1f865";
-							 		  String sender = "GAMLAA";
-							 		  String mobilenumber = "91"+obj.getString("SellerMobile");
+					 		   		  //String authkey = "204882AnH8usahCKvL5ab1f865";
+							 		  //String sender = "GAMLAA";
+							 		  String mobilenumberseller = "91"+obj.getString("SellerMobile");
 							 		       
 							 		  try {
-							 		   	    String res = "http://api.msg91.com/api/sendhttp.php?sender=GAMLAA&route=4&mobiles="+URLEncoder.encode(mobilenumber, "UTF-8")+"&authkey="+URLEncoder.encode(authkey, "UTF-8")+"&country=91&message="+URLEncoder.encode(obj.getString("messageForSeller"), "UTF-8");
+							 		   	    String res = "http://api.msg91.com/api/sendhttp.php?sender=GAMLAA&route=4&mobiles="+URLEncoder.encode(mobilenumberseller, "UTF-8")+"&authkey="+URLEncoder.encode(authkey, "UTF-8")+"&country=91&message="+URLEncoder.encode(obj.getString("messageForSeller"), "UTF-8");
 							 		       	System.out.println("message--------->"+res);
 							 		       	} catch (UnsupportedEncodingException e1) {
 							 		   			// TODO Auto-generated catch block
 							 		   			e1.printStackTrace();
 							 		   		}
 							 		       	try {
-							 		       	HttpResponse<String> response = Unirest.get("http://api.msg91.com/api/sendhttp.php?sender=GAMLAA&route=4&mobiles="+URLEncoder.encode(mobilenumber, "UTF-8")+"&authkey="+URLEncoder.encode(authkey, "UTF-8")+"&country=91&message="+URLEncoder.encode(obj.getString("messageForSeller"), "UTF-8"))
+							 		       	HttpResponse<String> response = Unirest.get("http://api.msg91.com/api/sendhttp.php?sender=GAMLAA&route=4&mobiles="+URLEncoder.encode(mobilenumberseller, "UTF-8")+"&authkey="+URLEncoder.encode(authkey, "UTF-8")+"&country=91&message="+URLEncoder.encode(obj.getString("messageForSeller"), "UTF-8"))
 							 		       			  .asString();
 							 		       	
 							 		       	}
@@ -2195,7 +2200,80 @@ public class GamlaService {
     
     
     }
-    
+    @POST
+    @Path("/ProductType")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.TEXT_HTML)
+    public String ProductType(@FormParam("catagory") String catagory){
+        String result="false";
+        JSONArray objarray = new JSONArray();
+        boolean x;
+        Statement mystmt=null;
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(url, user, pass);
+            mystmt = conn.createStatement();
+            //String sql = "Select DISTINCT ProductName from productlist where MobileNo = ? and productid =?";
+            String Status = "In Stock";
+            ResultSet results = mystmt.executeQuery("Select distinct ProductName from productlist where Categoryname = '"+catagory+"' and Status ='"+Status+"'");
+            if(results.next())
+            {
+            	
+            	JSONObject obj;
+            	results.previous();
+            	while(results.next())
+            	{
+            		obj = new JSONObject();
+            		obj.put("name", results.getString("ProductName"));
+            		objarray.put(obj);
+            	}
+            }
+            else
+            {
+            	objarray.put("false");
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return objarray+"";
+    }
+    @POST
+    @Path("/GetMinAndMaxPrice")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.TEXT_HTML)
+    public String GetMinAndMaxPrice(@FormParam("catagory") String catagory){
+        String result="false";
+      
+        boolean x;
+        Statement mystmt=null;
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(url, user, pass);
+            mystmt = conn.createStatement();
+            //String sql = "Select DISTINCT ProductName from productlist where MobileNo = ? and productid =?";
+            String Status = "In Stock";
+            ResultSet results = mystmt.executeQuery("Select MIN(SellingPrice) As MinPrice, MAX(SellingPrice) As MaxPrice from productlist where Categoryname = '"+catagory+"' and Status ='"+Status+"'");
+            if(results.next())
+            {
+            	
+            	
+            	results.previous();
+            	while(results.next())
+            	{
+            		result = results.getString("MinPrice")+","+results.getString("MaxPrice");
+            	}
+            }
+            else
+            {
+            	result = "false";
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
     
     @SuppressWarnings("unused")
 	private void createFolderIfNotExists(String dirName)
